@@ -1,0 +1,52 @@
+---
+- name: create Jenkins master vm from template
+  vmware_guest:
+     hostname: "{{}}"
+     username: "{{}}"
+     password: "{{}}"
+     validate_certs: False
+     name: Jenkins-Master
+     template: ""
+     datacenter: ""
+     folder: 
+     state: ""
+     wait_for_ip_address: yes
+  register: jenMasterInfo
+
+- name: create Jenkins Slave vm from template
+  vmware_guest:
+     hostname: "{{}}"
+     username: "{{}}"
+     password: "{{}}"
+     validate_certs: False
+     name: Jenkins-Slave
+     template: ""
+     datacenter: ""
+     folder: 
+     state: ""
+     wait_for_ip_address: yes
+  register: jenSlaveInfo
+
+- name: create docker vm from template
+  vmware_guest:
+     hostname: "{{}}"
+     username: "{{}}"
+     password: "{{}}"
+     validate_certs: False
+     name: docker-host
+     template: ""
+     datacenter: ""
+     folder: 
+     state: ""
+     wait_for_ip_address: yes
+  register: dockerInfo
+
+- name: show success when all vm's provisioned
+  debug:
+    msg: "Infra provisioned successfully"
+  when: jenMasterInfo.changed and jenSlaveInfo.changed and dockerInfo.changed
+
+- name: fail when vm's not provisioned
+  fail:
+    msg: "Infra provision failed"
+  when: not jenMasterInfo.changed or not jenSlaveInfo.changed or not dockerInfo.changed

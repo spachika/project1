@@ -1,0 +1,4 @@
+---
+# pyvmomi library is required for ansible interaction with ESX or vpshere
+- pip:
+    name: pyvmomi
